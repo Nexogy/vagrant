@@ -18,7 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
   # NETWORKING
-  config.vm.network "private_network", ip: "192.168.56.110"
+  config.vm.network "private_network", ip: "192.168.56.101"
 
   #SYNC
   config.vm.synced_folder ".", "/home/vagrant", disabled: true
