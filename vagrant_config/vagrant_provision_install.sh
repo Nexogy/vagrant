@@ -13,6 +13,9 @@ echo "---------------------------------------------------------------"
 echo "UPDATING APT-GET"
 echo "---------------------------------------------------------------"
 apt-get update
+apt-get install libxrender1
+apt-get install libfontconfig1
+apt-get install unzip
 
 echo "---------------------------------------------------------------"
 echo "INSTALLING GIT"
@@ -26,14 +29,9 @@ echo "----------------------------------------------------------------"
 apt-get install -y nginx
 service nginx stop
 
-cp /vagrant/config/nginx_sites/etc/nginx/sites-available/nginx_vhost
-ln -s /etc/nginx/sites-available/nginx_vhost/etc/nginx/sites-enabled/
+cp /home/vagrant/config/nginx_sites /etc/nginx/sites-available/nginx_vhost
+ln -s /etc/nginx/sites-available/nginx_vhost /etc/nginx/sites-enabled/
 rm -rf /etc/nginx/sites-available/default
-
-#if ! [ -L /var/www ]; then
-#  rm -rf /var/www
-#  ln -fs /vagrant /var/www
-#fi
 service nginx start
 
 echo "---------------------------------------------------------------"
@@ -53,6 +51,10 @@ apt-get install debconf-utils -y
 debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password root"
 apt-get install mysql-server -y
+mysql -proot --execute="grant all privileges on *.* to 'root'@'%' identified by '1234';"
+mysql -proot --execute="CREATE DATABASE dna;"
+cp /home/vagrant/config/my.cnf /etc/mysql/my.cnf
+service mysql restart
 
 echo "---------------------------------------------------------------"
 echo "INSTALLING COMPOSER"
@@ -75,22 +77,20 @@ sudo apt-get install -y nodejs
 echo "---------------------------------------------------------------"
 echo "INSTALLING RUBY"
 echo "---------------------------------------------------------------"
-#apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev -y
-#apt-get install libgdbm-dev libncurses5-dev automake libtool bison libffi-dev -y
+apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev -y
+apt-get install libgdbm-dev libncurses5-dev automake libtool bison libffi-dev -y
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-#curl -L https://get.rvm.io | bash -s stable
 \curl -sSL https://get.rvm.io | bash -s stable
-#\curl -sSL https://get.rvm.io | bash -s stable --rails
-#source ~/.rvm/scripts/rvm
-
-
-#apt-add-repository ppa:rael-gc/rvm -y
-#apt-get update
-#apt-get install rvm -y
-#rvm install ruby
+apt-get install ruby1.9.1-dev -y
 
 echo "---------------------------------------------------------------"
 echo "INSTALLING MAILCATCHER"
 echo "---------------------------------------------------------------"
 gem install mailcatcher
+
+
+echo "---------------------------------------------------------------"
+echo "COMPOSER INSTALL"
+echo "---------------------------------------------------------------"
+composer install
 

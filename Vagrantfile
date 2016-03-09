@@ -12,18 +12,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "ubuntu/trusty64"
 
-  config.vm.provision :shell, path: ".vagrant_config/vagrant_provision_install.sh"
+  config.vm.provision :shell, path: "vagrant_config/vagrant_provision_install.sh"
 
-  config.vm.provision :shell, path: ".vagrant_config/vagrant_boot.sh", run: "always"
+  config.vm.provision :shell, path: "vagrant_config/vagrant_boot.sh", run: "always"
 
 
   # NETWORKING
   config.vm.network "private_network", ip: "192.168.56.110"
 
   #SYNC
-  config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.synced_folder "vagrant_config", "/vagrant/config"
-  config.vm.synced_folder "projects", "/var/www"
+  config.vm.synced_folder ".", "/home/vagrant", disabled: true
+  config.vm.synced_folder "vagrant_config", "/home/vagrant/config"
+  config.vm.synced_folder "projects", "/var/www", owner: "www-data", group: "www-data"
 
 
 
